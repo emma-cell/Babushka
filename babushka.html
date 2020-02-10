@@ -13,12 +13,19 @@
         }
 
 
+        /*
         #logo {
-            position: relative;
-            left: 470px;
-            top: 20px;
-            height: 30vw;
-            width: 25vw;
+        position: relative;
+        left: 470px;
+        top: 20px;
+        height: 30vw;
+        width: 25vw;
+
+        }
+*/
+
+        .valgt {
+            background-color: yellow;
 
         }
 
@@ -71,9 +78,11 @@
 
     </style>
 
+    <!--
     <div id="logo">
         <img src="dukke.svg" alt="dukke">
     </div>
+-->
 
     <h1>Bistro Babushka</h1>
 
@@ -112,6 +121,7 @@
 
         function start() {
             hentData();
+            clickHandler();
         }
 
         async function hentData() {
@@ -127,18 +137,41 @@
             const template = document.querySelector("template");
 
             retter.feed.entry.forEach(ret => {
+//                if (filter == "alle" || filter == ret.gsx$navn.$t)
 
 
-                let klon = template.cloneNode(true).content;
+                    let klon = template.cloneNode(true).content;
 
                 klon.querySelector("h2").textContent = `${ret.gsx$navn.$t}`;
                 klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
                 klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
+                klon.querySelector("img").src = `${ret.gsx$billede.$t}`;
 
 
                 container.appendChild(klon);
 
             })
+        }
+
+        function clickHandler() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            console.log("FILTER");
+            filter = this.dataset.ret;
+            visRetter();
+
+            document.querySelector("h1").textContent = this.textContent;
+
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+
+            this.classList.add("valgt");
+
         }
 
     </script>

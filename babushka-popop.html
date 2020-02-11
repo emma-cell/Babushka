@@ -86,6 +86,34 @@
 
         }
 
+        #detalje {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            top: 0;
+            overflow: scroll;
+        }
+
+        .ret {
+            margin: 3em;
+            padding: 2em;
+            background-color: white;
+            cursor: pointer;
+
+        }
+
+        #detalje button {
+            font-size: 2rem;
+            margin: 5em;
+        }
+
+        .skjul {
+            display: none;
+        }
+
+
     </style>
 
 
@@ -118,6 +146,15 @@
         </article>
     </template>
 
+       <section id="detalje" class="skjul">
+        <button id="luk">X</button>
+        <article class="ret">
+            <h1>Navn</h1>
+            <p></p>
+            <p>Pris: </p>
+            <img src="" alt="">
+        </article>
+    </section>
 
     <script>
         const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
@@ -154,6 +191,7 @@
                     klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
                     klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
                     klon.querySelector("img").src = `imgs/small/${ret.gsx$billede.$t}-sm.jpg`;
+                    klon.querySelector("article").addEventListener("click", () => visDetalje(ret));
 
 
                     container.appendChild(klon);
@@ -184,6 +222,18 @@
             })
 
             this.classList.add("valgt");
+
+        }
+
+         function visDetalje(ret) {
+            detalje.classList.remove("skjul");
+            detalje.querySelector("button").addEventListener("click", () => detalje.classList.add("skjul"));
+            console.log(ret.gsx$navn.$t);
+            detalje.querySelector("h1").textContent = `${ret.gsx$navn.$t}`;
+             detalje.querySelector("p").textContent = `${ret.gsx$lang.$t}`;
+             detalje.querySelector("p + p").innerHTML = `${ret.gsx$pris.$t}`;
+            detalje.querySelector("img").src = `imgs/large/${ret.gsx$billede.$t}.jpg`;
+
 
         }
 

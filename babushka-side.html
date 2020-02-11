@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Russo+One&display=swap" rel="stylesheet">
+    <title>Bistro Babushka</title>
+
+    <style>
+        body {
+            background-color: whitesmoke;
+        }
+
+
+
+        #logo {
+            position: relative;
+            left: 10px;
+            top: 30px;
+            height: 5vw;
+            width: 6vw;
+
+        }
+
+
+        .valgt {
+            background-color: yellow;
+
+        }
+
+        #data_container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 5px;
+            max-width: 1000px;
+            margin: 0 auto;
+            cursor: pointer;
+
+        }
+
+        article {
+            border: 2px solid red;
+            height: auto;
+            background-color: yellow;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        button {
+            background-color: white;
+            align-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        h1,
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Russo One', sans-serif;
+
+        }
+
+        p {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 12px;
+
+
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Russo One', sans-serif;
+
+        }
+
+
+        img {
+            max-width: 90%;
+            max-height: 500px;
+            margin-bottom: 10px;
+
+        }
+
+    </style>
+
+
+    <div id="logo">
+        <img src="babushka-logo.svg" alt="dukke">
+    </div>
+
+    <h1>Vores retter</h1>
+
+    <nav>
+        <button class="filter valgt" data-kategorier="alle">Alle</button>
+        <button class="filter" data-kategorier="forretter">Foretter</button>
+        <button class="filter" data-kategorier="hovedretter">Hovedretter</button>
+        <button class="filter" data-kategorier="desserter">Desserter</button>
+        <button class="filter" data-kategorier="sideorders">Sideorders</button>
+        <button class="filter" data-kategorier="drikkevarer">Drikkevarer</button>
+    </nav>
+</head>
+
+
+<body>
+
+    <section id="data_container"></section>
+    <template>
+        <article>
+            <h2 class="navn"></h2>
+            <p class="kort"></p>
+            <p class="pris"></p>
+            <img src="" alt="">
+        </article>
+    </template>
+
+
+    <script>
+        const endpoint = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+        let retter = [];
+
+        let filter = "alle";
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentData();
+            clickHandler();
+        }
+
+        async function hentData() {
+            const response = await fetch(endpoint);
+            retter = await response.json();
+            visRetter();
+
+        }
+
+        function visRetter() {
+            const container = document.querySelector("#data_container");
+            container.innerHTML = "";
+            const template = document.querySelector("template");
+
+            retter.feed.entry.forEach(ret => {
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
+
+
+                    let klon = template.cloneNode(true).content;
+
+                    klon.querySelector("h2").textContent = `${ret.gsx$navn.$t}`;
+                    klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
+                    klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
+                    klon.querySelector("img").src = `imgs/small/${ret.gsx$billede.$t}-sm.jpg`;
+
+
+                    container.appendChild(klon);
+                }
+
+            })
+        }
+
+
+
+
+        function clickHandler() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+
+            filter = this.dataset.kategorier;
+            console.log("FILTER",filter);
+            visRetter();
+
+            document.querySelector("h1").textContent = this.textContent;
+
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+
+            this.classList.add("valgt");
+
+        }
+
+    </script>
+</body>
+
+</html>

@@ -13,16 +13,16 @@
         }
 
 
-        /*
+
         #logo {
-        position: relative;
-        left: 470px;
-        top: 20px;
-        height: 30vw;
-        width: 25vw;
+            position: relative;
+            left: 10px;
+            top: 30px;
+            height: 5vw;
+            width: 6vw;
 
         }
-*/
+
 
         .valgt {
             background-color: yellow;
@@ -35,6 +35,7 @@
             grid-gap: 5px;
             max-width: 1000px;
             margin: 0 auto;
+            cursor: pointer;
 
         }
 
@@ -52,6 +53,7 @@
             background-color: white;
             align-content: center;
             border-radius: 5px;
+            cursor: pointer;
         }
 
         h1,
@@ -76,23 +78,30 @@
 
         }
 
+
+        img {
+            max-width: 90%;
+            max-height: 500px;
+            margin-bottom: 10px;
+
+        }
+
     </style>
 
-    <!--
-    <div id="logo">
-        <img src="dukke.svg" alt="dukke">
-    </div>
--->
 
-    <h1>Bistro Babushka</h1>
+    <div id="logo">
+        <img src="babushka-logo.svg" alt="dukke">
+    </div>
+
+    <h1>Vores retter</h1>
 
     <nav>
-        <button class="filter valgt" data-ret="alle">Alle</button>
-        <button class="filter" data-ret="forretter">Foretter</button>
-        <button class="filter" data-ret="hovedretter">Hovedretter</button>
-        <button class="filter" data-ret="desserter">Desserter</button>
-        <button class="filter" data-ret="sideorders">Sideorders</button>
-        <button class="filter" data-ret="drikkevarer">Drikkevarer</button>
+        <button class="filter valgt" data-kategorier="alle">Alle</button>
+        <button class="filter" data-kategorier="forretter">Foretter</button>
+        <button class="filter" data-kategorier="hovedretter">Hovedretter</button>
+        <button class="filter" data-kategorier="desserter">Desserter</button>
+        <button class="filter" data-kategorier="sideorders">Sideorders</button>
+        <button class="filter" data-kategorier="drikkevarer">Drikkevarer</button>
     </nav>
 </head>
 
@@ -105,7 +114,6 @@
             <h2 class="navn"></h2>
             <p class="kort"></p>
             <p class="pris"></p>
-
             <img src="" alt="">
         </article>
     </template>
@@ -137,21 +145,25 @@
             const template = document.querySelector("template");
 
             retter.feed.entry.forEach(ret => {
-//                if (filter == "alle" || filter == ret.gsx$navn.$t)
+                if (filter == "alle" || filter == ret.gsx$kategori.$t) {
 
 
                     let klon = template.cloneNode(true).content;
 
-                klon.querySelector("h2").textContent = `${ret.gsx$navn.$t}`;
-                klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
-                klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
-                klon.querySelector("img").src = `${ret.gsx$billede.$t}`;
+                    klon.querySelector("h2").textContent = `${ret.gsx$navn.$t}`;
+                    klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
+                    klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
+                    klon.querySelector("img").src = `imgs/small/${ret.gsx$billede.$t}-sm.jpg`;
 
 
-                container.appendChild(klon);
+                    container.appendChild(klon);
+                }
 
             })
         }
+
+
+
 
         function clickHandler() {
             document.querySelectorAll(".filter").forEach(elm => {
@@ -160,8 +172,9 @@
         }
 
         function filtrering() {
-            console.log("FILTER");
-            filter = this.dataset.ret;
+
+            filter = this.dataset.kategorier;
+            console.log("FILTER",filter);
             visRetter();
 
             document.querySelector("h1").textContent = this.textContent;

@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Russo+One&display=swap" rel="stylesheet">
-    <title>Bistro Babushka</title>
+    <title>Bistro Babushka popop</title>
 
     <style>
         body {
-            background-color: whitesmoke;
+            background-color: white;
         }
 
 
@@ -40,7 +40,7 @@
         }
 
         article {
-            border: 2px solid red;
+/*            border: 2px solid red;*/
             height: auto;
             background-color: yellow;
             display: flex;
@@ -93,7 +93,7 @@
             background-color: rgba(0, 0, 0, 0.7);
             z-index: 10;
             top: 0;
-            overflow: scroll;
+            /*            overflow: scroll;*/
         }
 
         .ret {
@@ -105,14 +105,14 @@
         }
 
         #detalje button {
-            font-size: 2rem;
-            margin: 5em;
+            font-size: 1rem;
+            position: fixed;
+            left: 100px;
         }
 
         .skjul {
             display: none;
         }
-
 
     </style>
 
@@ -146,12 +146,12 @@
         </article>
     </template>
 
-       <section id="detalje" class="skjul">
-        <button id="luk">X</button>
+    <section id="detalje" class="skjul">
         <article class="ret">
+            <button id="luk">X</button>
             <h1>Navn</h1>
             <p></p>
-            <p>Pris: </p>
+            <p>Pris - <span id="pris"></span></p>
             <img src="" alt="">
         </article>
     </section>
@@ -212,7 +212,7 @@
         function filtrering() {
 
             filter = this.dataset.kategorier;
-            console.log("FILTER",filter);
+            console.log("FILTER", filter);
             visRetter();
 
             document.querySelector("h1").textContent = this.textContent;
@@ -225,13 +225,13 @@
 
         }
 
-         function visDetalje(ret) {
+        function visDetalje(ret) {
             detalje.classList.remove("skjul");
             detalje.querySelector("button").addEventListener("click", () => detalje.classList.add("skjul"));
             console.log(ret.gsx$navn.$t);
             detalje.querySelector("h1").textContent = `${ret.gsx$navn.$t}`;
-             detalje.querySelector("p").textContent = `${ret.gsx$lang.$t}`;
-             detalje.querySelector("p + p").innerHTML = `${ret.gsx$pris.$t}`;
+            detalje.querySelector("p").textContent = `${ret.gsx$lang.$t}`;
+            detalje.querySelector("#pris").innerHTML = `${ret.gsx$pris.$t}`;
             detalje.querySelector("img").src = `imgs/large/${ret.gsx$billede.$t}.jpg`;
 
 

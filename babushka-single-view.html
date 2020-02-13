@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Russo+One&display=swap" rel="stylesheet">
-    <title>Bistro Babushka</title>
+    <title>Bistro Babushka single-view</title>
 
     <style>
         body {
-            background-color: whitesmoke;
+            background-color: white;
         }
 
 
@@ -40,7 +40,7 @@
         }
 
         article {
-            border: 2px solid red;
+/*            border: 2px solid red;*/
             height: auto;
             background-color: yellow;
             display: flex;
@@ -110,7 +110,7 @@
 
     <section id="data_container"></section>
     <template>
-        <article>
+        <article class="article">
             <h2 class="navn"></h2>
             <p class="kort"></p>
             <p class="pris"></p>
@@ -153,7 +153,11 @@
                     klon.querySelector("h2").textContent = `${ret.gsx$navn.$t}`;
                     klon.querySelector("p").textContent += `${ret.gsx$kort.$t}`;
                     klon.querySelector("p + p").tetxContent += `${ret.gsx$pris.$t}`;
-                    klon.querySelector("img").src = `imgs/small/${ret.gsx$billede.$t}-sm.jpg`;
+                    klon.querySelector("img").src = `imgs/large/${ret.gsx$billede.$t}.jpg`;
+
+                    klon.querySelector(".article").addEventListener("click", () => {
+                        location.href = "babushka-detaljer.html?id=" + ret.gsx$id.$t;
+                    });
 
 
                     container.appendChild(klon);
@@ -174,7 +178,7 @@
         function filtrering() {
 
             filter = this.dataset.kategorier;
-            console.log("FILTER",filter);
+            console.log("FILTER", filter);
             visRetter();
 
             document.querySelector("h1").textContent = this.textContent;
